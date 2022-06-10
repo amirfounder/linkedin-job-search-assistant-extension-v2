@@ -8,39 +8,35 @@
 
 <body>
   <div>
-    <h2>
-      LinkedIn Outreach Program
-    </h2>
   </div>
   <div>
-    <h3>
-      Current LinkedIn Profile
-    </h3>
     <div class="profileData">
       <div class="name__container">
-        <label class="name__label">Name
-          <input class="name__input" />
-        </label>
-      </div>
-      <div class="headline__container">
-        <label class="headline__label">Headline
-          <input class="headline__input" />
+        <label>Name
+          <input class="name" />
         </label>
       </div>
       <div class="company__container">
-        <label class="company__label">Company
-          <input class="company__input" />
+        <label>Company
+          <input class="company" />
         </label>
       </div>
     </div>
   </div>
   <div>
-    <h3>
-      Outreach Message
-    </h3>
+    <div class="headline__container">
+      <label>Headline
+        <input class="headline" />
+      </label>
+    </div>
     <div class="message__container">
-      <textarea class="message__input" rows="9"></textarea>
-      <button id="copyMessageToClipboard">Copy to Clipboard</button>
+      <label>
+        Outreach Message
+        <textarea class="message" rows="9"></textarea>
+      </label>
+      <button class="generateAndCopyInitialConnectionMessage">Copy Initial Connection MSG</button>
+      <button class="generateAndCopyPostConnectionIntroMessage">Copy Post Connection MSG</button>
+      <!-- <button id="copyMessageToClipboard">Copy to Clipboard</button> -->
     </div>
   </div>
   <div>
@@ -51,6 +47,13 @@
       <button class="saveRecruiterProfile">Save Recruiter's Profile</button>
       <button class="markInitialConnectionRequestSent">Mark Initial Connection Request Sent</button>
       <button class="getNextRecruiters">Get Next Recruiters List</button>
+      <button class="resync">Resync</button>
+      <div>
+        <label>
+          Initial Connection Sent
+          <input class="initial-connection-sent" type="checkbox">
+        </label>
+      </div>
     </div>
   </div>
 </body>
