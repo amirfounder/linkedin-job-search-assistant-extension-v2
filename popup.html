@@ -7,55 +7,76 @@
 </head>
 
 <body>
-  <div>
-  </div>
-  <div>
-    <div class="profileData">
-      <div class="name__container">
-        <label>Name
-          <input class="name" />
-        </label>
+  <div class="main">
+    <div>
+      <h4>
+        Touchpoints
+        <span class="fetchingProfileDataStatus">(Loading ...)</span>
+      </h4>
+      <div class="actions">
+        <div class="checkboxes-container">
+          <label>
+            <input class="initial-connection-sent" type="checkbox">
+            Initial Connection Sent
+          </label>
+          <label>
+            <input class="initial-connection-sent" type="checkbox">
+            Connection Accepted
+          </label>
+          <label>
+            <input class="initial-connection-sent" type="checkbox">
+            Initial Connection Sent
+          </label>
+        </div>
+        <div>
+          <button>
+            Update Touchpoints
+          </button>
+        </div>
       </div>
-      <div class="company__container">
-        <label>Company
-          <input class="company" />
-        </label>
+      <div>
+        <h4>
+          Next Contacts
+        </h4>
+        <button class="resync">Resync Popup (Dev)</button>
       </div>
     </div>
-  </div>
-  <div>
-    <div class="headline__container">
-      <label>Headline
-        <input class="headline" />
-      </label>
-    </div>
-    <div class="message__container">
-      <label>
-        Outreach Message
-        <textarea class="message" rows="9"></textarea>
-      </label>
-      <button class="generateAndCopyInitialConnectionMessage">Copy Initial Connection MSG</button>
-      <button class="generateAndCopyPostConnectionIntroMessage">Copy Post Connection MSG</button>
-      <!-- <button id="copyMessageToClipboard">Copy to Clipboard</button> -->
-    </div>
-  </div>
-  <div>
-    <h3>
-      Actions
-    </h3>
-    <div class="actions">
-      <button class="saveRecruiterProfile">Save Recruiter's Profile</button>
-      <button class="markInitialConnectionRequestSent">Mark Initial Connection Request Sent</button>
-      <button class="getNextRecruiters">Get Next Recruiters List</button>
-      <button class="resync">Resync</button>
+    <div>
+      <h4>Interactions</h4>
+      <div>
+        <div class="nameAndCompanyInputs">
+          <label>
+            <div class="labelText">Name</div>
+            <input type="text" class="name" />
+          </label>
+          <label>
+            <div class="labelText">Company</div>
+            <input type="text" class="company" />
+          </label>
+        </div>
+      </div>
       <div>
         <label>
-          Initial Connection Sent
-          <input class="initial-connection-sent" type="checkbox">
+          <div class="labelText">Headline</div>
+          <input type="text" class="headline" />
         </label>
+        <label>
+          <div class="labelText">Outreach Message</div>
+          <textarea class="message" rows="12" placeholder="Generate a message to populate this field...."></textarea>
+        </label>
+        <div>
+          <h4>Generate & Copy Messages</h4>
+          <div class="generateAndCopyMessagesContainer">
+            <button class="generateAndCopyInitialConnectionMessage">Initial Connection Recruiter</button>
+            <button class="generateAndCopyPostConnectionMessage">Post Connection Recruiter</button>
+            <button class="generateAndCopyInitialConnectionMessage">Initial Connection - SWE</button>
+            <button class="generateAndCopyPostConnectionMessage">Post Connection - SWE</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
 </body>
 
 </html>

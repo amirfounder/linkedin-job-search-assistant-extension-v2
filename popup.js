@@ -5,51 +5,77 @@
 
 
 const MY_FNAME = 'Amir'
+const MY_NAME = 'Amir Sharapov'
 const MY_POSITION = 'Software Engineer'
 const MY_TEL = `331.255.6927`
 const MY_EMAIL = 'amirfounder18@gmail.com'
-
-const POST_CONNECTION_MESSAGE = `\
-Hi {fname}, thank you for accepting my connection request.
-
-Please find my updated resume attached to this message.
-If you think I may be a good fit for any position you or someone you know may be recruiting for, \
-please feel free to reach out via phone, email or LinkedIn message and we can put some time on the calendar for a call.
-I look forward to hearing from you!
-
-{my_fname}
-Tel: {my_tel}
-Email: {my_email}`
-
-const INIT_CONNECTION_MESSAGE = `\
+const INIT_CONNECTION_MESSAGE_RECRUITER = `\
 Hello, {fname}!
+
 My name is {my_fname} and I'm currently a {my_position}.
 I saw your profile and wanted to reach out and introduce myself.
 If you have time, I would love the opportunity to discuss how my \
 skills and experience align with any open roles {company} is looking to fill.
+
 Best,
 {my_fname}`
+const POST_CONNECTION_MESSAGE_RECRUITER = `\
+Hi {fname}, thank you for accepting my connection request!
+
+Please find my updated resume attached to this message.
+If you think I may be a good fit for any position you or someone you know may be recruiting for, \
+please feel free to reach out via phone, email or LinkedIn message \
+and we can put some time on the calendar for a call.
+I look forward to hearing from you!
+
+{my_name}
+Tel: {my_tel}
+Email: {my_email}`
+const INIT_CONNECTION_MESSAGE_SWE = `\
+Hello, {fname}!
+
+My name is {my_fname} and I'm currently a {my_position}.
+I saw your profile and wanted to reach out and introduce myself.
+If you have time, I would love the opportuntity to learn more about your \
+day to day experience as a {headline} at {company}.
+
+Best,\
+Amir`
 
 
 
 const __init__ = () => {
+
+  // ----------------------------------------
+  // ----- HELPERS -------------------------
+  // ----------------------------------------
+
+
+
+  const now = () => new Date().toISOString()
+  const copy = (s) => navigator.clipboard.writeText(s)
+  const getElement = (selector) => document.querySelector(selector)
+
+
+
   // ----------------------------------------
   // ----- ELEMENTS -------------------------
   // ----------------------------------------
 
 
 
-  const NAME_INPT = document.querySelector('.name')
-  const HEADING_INPT = document.querySelector('.heading')
-  const COMPANY_INPT = document.querySelector('.company')
-  const MSG_INPT = document.querySelector('.message')
+  const NAME_INPT = getElement('.name')
+  const HEADLINE_INPT = getElement('.headline')
+  const COMPANY_INPT = getElement('.company')
+  const MSG_INPT = getElement('.message')
 
-  const HAS_INIT_CONN_MSG_BEEN_SENT_BTN = document.querySelector('.hasInitialConnectionMessageBeenSent')
-  const IS_CONNECTED_CB = document.querySelector('.isConnected')
+  const HAS_INIT_CONN_MSG_BEEN_SENT_BTN = getElement('.hasInitialConnectionMessageBeenSent')
+  const IS_CONNECTED_CB = getElement('.isConnected')
 
-  const GEN_COPY_INIT_CONN_MSG_BTN = document.querySelector('.generateAndCopyInitialConnectionMessage')
-  const GEN_COPY_POST_CONN_INTRO_MSG_BTN = document.querySelector('.generateAndCopyPostConnectionIntroMessage')
-  const UPDATE_RECRUITER_PROFILE_BTN = document.querySelector('.updateRecruiterProfile')
+  const GEN_COPY_INIT_CONN_MSG_BTN = getElement('.generateAndCopyInitialConnectionMessage')
+  const GEN_COPY_POST_CONN_INTRO_MSG_BTN = getElement('.generateAndCopyPostConnectionMessage')
+  const UPDATE_RECRUITER_PROFILE_BTN = getElement('.updateRecruiterProfile')
+  const FETCHING_PROFILE_DATA_STATUS = getElement('.fetchingProfileDataStatus')
 
 
 
@@ -58,50 +84,108 @@ const __init__ = () => {
   // ----------------------------------------
 
 
-
+  
   const state = {
     nextAvailableCompany: null,
-    profile: {
-      username: null,
-      name: null,
-      headline: null,
-      fname: null,
-      company: null,
+    fetchingStatus: null,
+    recruiter: {
+      profile: {
+        username: null,
+        name: null,
+        headline: null,
+        fname: null,
+        company: null,
+      },
       touchpoints: {
-        initial_connection: {
-          created_at: null,
-          updated_at: null,
-          status: null
+        initial_connection_message_sent: {
+          value: false
         },
         initial_connection_accepted: {
-          created_at: null,
-          updated_at: null,
-          status: null
+          value: false
         },
-        post_connection_intro_message: {
-          created_at: null,
-          updated_at: null,
-          status: null
+        post_connection_message_sent: {
+          value: false
         },
         post_connection_follow_up_message: {
-          created_at: null,
-          updated_at: null,
-          status: null
+          value: false
+        },
+        post_connection_message_responded: {
+          value: false
+        },
+        resume_sent: {
+          value: false
+        },
+        initial_call_occured: {
+          value: false
         }
       }
     }
   }
 
-  
+  const setFetchingProfileDataStatus = (status) => {
+    FETCHING_PROFILE_DATA_STATUS.innerText = `(${status})` 
+  }
+
+  const syncTouchpointsFromStateToDom = () => {
+    
+  }
+
+  const syncProfileFromStateToDom = () => {
+    NAME_INPT.value = state.profile.name
+    HEADLINE_INPT.value = state.profile.headline
+    COMPANY_INPT.value = state.profile.company
+  }
+
+  const syncProfileFromDomToState = () => {
+    state.profile.name = NAME_INPT.value
+    state.profile.headline = HEADLINE_INPT.value
+    state.profile.company = COMPANY_INPT.value
+    state.profile.fname = state.profile.name?.split(' ').at(0)
+  }
+
+
+
+  // ----------------------------------------
+  // ----- MESSAGES -------------------------
+  // ----------------------------------------
+
+
+
+  const generateInitialConnectionMessage = () => (
+    INIT_CONNECTION_MESSAGE_RECRUITER
+      .replaceAll('{fname}', state.profile.fname)
+      .replaceAll('{company}', state.profile.company)
+      .replaceAll('{my_fname}', MY_FNAME)
+      .replaceAll('{my_position}', MY_POSITION)
+  )
+
+  const generatePostConnectionIntroMessage = () => (
+    POST_CONNECTION_MESSAGE_RECRUITER
+      .replaceAll('{fname}', state.profile.fname)
+      .replaceAll('{my_name}', MY_NAME)
+      .replaceAll('{my_tel}', MY_TEL)
+      .replaceAll('{my_email}', MY_EMAIL)
+  )
+
+  const generateAndCopyPostConnectionMessage = () => {
+    const msg = generatePostConnectionIntroMessage()
+    MSG_INPT.value = msg
+    copy(msg)
+  }
+
+  const generateAndCopyInitialConnectionMessage = () => {
+    const msg = generateInitialConnectionMessage()
+    MSG_INPT.value = msg
+    copy(msg)
+  }
+
+
 
   // ----------------------------------------
   // ----- SERVICES -------------------------
   // ----------------------------------------
 
 
-
-  const now = () => new Date().toISOString()
-  const copy = (s) => navigator.clipboard.writeText(s)
 
   const httpRequest = async (method, route, body) => {
     return fetch('http://localhost:8082' + route, {
@@ -114,76 +198,41 @@ const __init__ = () => {
     })
   }
 
-  const generateInitialConnectionMessage = () => (
-    INIT_CONNECTION_MESSAGE
-      .replaceAll('{fname}', state.profile.fname)
-      .replaceAll('{company}', state.profile.company)
-      .replaceAll('{my_fname}', MY_FNAME)
-      .replaceAll('{my_position}', MY_POSITION)
-  )
-
-  const generatePostConnectionIntroMessage = () => (
-    POST_CONNECTION_MESSAGE
-      .replaceAll('{fname}', state.profile.fname)
-      .replaceAll('{my_fname}', MY_FNAME)
-      .replaceAll('{my_tel}', MY_TEL)
-      .replaceAll('{my_email}', MY_EMAIL)
-  )
-
-  const generateAndCopyPostConnectionIntroMessage = () => {
-    const msg = generatePostConnectionIntroMessage()
-    MSG_INPT.value = msg
-    copy(msg)
-  }
-
-  const generateAndCopyInitialConnectionMessage = () => {
-    const msg = generateInitialConnectionMessage()
-    MSG_INPT.value = msg
-    copy(msg)
-  }
-
   const postProfile = async () => {
     httpRequest('POST', '/recruiters', state.profile)
   }
 
-  const updateProfile = async () => {
-    syncFromDomToState()
+  const putProfile = async () => {
+    syncProfileFromDomToState()
     httpRequest('PUT', '/recruiters/' + state.profile.username, state.profile)
   }
 
-  const getProfile = async () => {
+  const fetchProfileData = async () => {
     httpRequest('GET', '/recruiters/' + state.profile.username)
-      .then(r => {
-        if (r.ok) {
-          return r.json()
-        } else if (r.status === 404) {
-          initScript().then(postProfile)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        } else if (response.status === 404) {
+          initScript()
+            .then(postProfile)
+            .then(() => setFetchingProfileDataStatus('Completed - Created New'))
         } else {
-          throw Error(r.statusText)
+          throw Error(response.statusText)
         }
       })
-      .then(data => { Object.assign(state.profile, data) })
-      .then(syncStateToDOM)
+      .then(data => {
+        Object.assign(state.profile, data)
+        syncProfileFromStateToDom()
+        setFetchingProfileDataStatus('Done')
+      })
+      .then(syncProfileFromStateToDom)
   }
 
   const getNextAvailableCompany = async () => {
     httpRequest('GET', '/companies/next')
       .then(r => r.json())
       .then(data => { state.nextAvailableCompany = data })
-      .then(syncStateToDOM)
-  }
-
-  const syncFromStateToDom = () => {
-    NAME_INPT.value = state.profile.name
-    HEADING_INPT.value = state.profile.headline
-    COMPANY_INPT.value = state.profile.company
-  }
-
-  const syncFromDomToState = () => {
-    state.profile.name = NAME_INPT.value
-    state.profile.headline = HEADING_INPT.value
-    state.profile.company = COMPANY_INPT.value
-    state.profile.fname = state.profile.name?.split(' ').at(0)
+      .then(syncProfileFromStateToDom)
   }
 
 
@@ -194,8 +243,13 @@ const __init__ = () => {
 
 
 
+  NAME_INPT.addEventListener('change', syncProfileFromDomToState)
+  HEADLINE_INPT.addEventListener('change', syncProfileFromDomToState)
+  COMPANY_INPT.addEventListener('change', syncProfileFromDomToState)
+
+
   GEN_COPY_INIT_CONN_MSG_BTN.addEventListener('click', generateAndCopyInitialConnectionMessage)
-  GEN_COPY_POST_CONN_INTRO_MSG_BTN.addEventListener('click', generateAndCopyPostConnectionIntroMessage)
+  GEN_COPY_POST_CONN_INTRO_MSG_BTN.addEventListener('click', generateAndCopyPostConnectionMessage)
 
 
 
@@ -229,8 +283,7 @@ const __init__ = () => {
     state.profile.fname = state.profile.name?.split(' ').at(0)
     state.profile.created_at = now_
     state.profile.updated_at = now_
-    syncFromStateToDom()
-    setMessageValue()
+    syncProfileFromStateToDom()
   })
 
 
@@ -242,7 +295,7 @@ const __init__ = () => {
 
 
   const initScript = async () => {
-    return chrome.tabs
+    chrome.tabs
       .query({active: true, currentWindow: true})
       .then(([tab]) => {
         chrome.scripting.executeScript({
@@ -250,6 +303,7 @@ const __init__ = () => {
           function: scrapeLinkedInProfilePage
         })
       })
+      .then(fetchProfileData)
   }
 
   initScript()
